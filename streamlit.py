@@ -24,7 +24,7 @@ client = Groq(api_key=groq_api_key)
 # Load model from GitHub
 @st.cache_resource
 def load_model():
-    model_url = "https://github.com/your-username/your-repository/raw/main/goods_damage_model.pkl"
+    model_url = "https://github.com/suryakranthivardhan/AI-based-package-damage-detection/blob/main/ml.py"
     model_path = 'goods_damage_model.pkl'
 
     # Check if the model is already downloaded
@@ -292,3 +292,4 @@ with tab3:
         if st.session_state.email_text:
             st.subheader("📄 Email Content")
             st.code(st.session_state.email_text, language="markdown")
+
