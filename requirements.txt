@@ -2,4 +2,6 @@ opencv-python-headless
 groq
 matplotlib
 requests
+scikit-learn
+
 
