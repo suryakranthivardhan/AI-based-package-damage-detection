@@ -1,14 +1,11 @@
-import os
+import streamlit as st
 import cv2
 import numpy as np
 import pickle
-import requests
-import streamlit as st
 from groq import Groq
 from PIL import Image
 import matplotlib.pyplot as plt  # For pie chart
 
-# Streamlit page configuration
 st.set_page_config(page_title="Damage Detection App", layout="wide")
 
 st.markdown(
@@ -21,29 +18,15 @@ st.markdown(
 groq_api_key = "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"
 client = Groq(api_key=groq_api_key)
 
-# Load model from GitHub
+# Load model
 @st.cache_resource
 def load_model():
-    model_url = "https://github.com/suryakranthivardhan/AI-based-package-damage-detection/blob/main/ml.py"
-    model_path = 'goods_damage_model.pkl'
-
-    # Check if the model is already downloaded
-    if not os.path.exists(model_path):
-        # Download the model if it doesn't exist
-        response = requests.get(model_url)
-        if response.status_code == 200:
-            with open(model_path, 'wb') as f:
-                f.write(response.content)
-        else:
-            raise Exception(f"Error downloading model: {response.status_code}")
-
-    # Load the model using pickle
-    with open(model_path, 'rb') as f:
+    with open('goods_damage_model.pkl', 'rb') as f:
         return pickle.load(f)
 
 model = load_model()
 
-# Feature extraction function
+# Feature extraction
 def extract_features_from_bytes(image_bytes):
     file_bytes = np.asarray(bytearray(image_bytes.read()), dtype=np.uint8)
     image = cv2.imdecode(file_bytes, cv2.IMREAD_COLOR)
@@ -52,7 +35,7 @@ def extract_features_from_bytes(image_bytes):
     cv2.normalize(hist, hist)
     return hist.flatten()
 
-# Email generation function
+# Email generation
 def generate_email(
     damaged,
     non_damaged,
@@ -292,4 +275,3 @@ with tab3:
         if st.session_state.email_text:
             st.subheader("📄 Email Content")
             st.code(st.session_state.email_text, language="markdown")
-
